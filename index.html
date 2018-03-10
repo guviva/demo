@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OSM Buildings</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .control {
+      position: absolute;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .control.tilt {
+      top: 0;
+    }
+
+    .control.rotation {
+      top: 60px;
+    }
+
+    .control.zoom {
+      top: 90px;
+    }
+
+    .control.zoom button{
+      font-weight: normal;
+    }
+
+    .control button {
+      width: 30px;
+      height: 30px;
+      margin: 15px 0 0 15px;
+      border: 1px solid #999999;
+      background: #ffffff;
+      opacity: 0.6;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #666666;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .control button:hover {
+      opacity: 1;
+      cursor: pointer;
+
+	      .button-wrapper{
+		        position: absolute;
+				  top:1em;
+					    left:1em;
+						      font-family: Arial, sans-serif;
+							        font-size:12px;
+	      }
+	      .button-wrapper .label{
+		        font-weight: bold;
+				  color:#555;
+					    margin-bottom:.5em;
+	      }
+	      .button-wrapper button{
+		        padding: .7em 1em;
+				  background: white;
+					    font-weight:bold;
+						      border:none;
+							        box-shadow: 0 2px 3px rgba(0,0,0,.1);
+									  border-radius:2px;
+										    z-index:99;
+											      cursor: pointer;
+												        background:#dd5050;
+														  color:white;
+	      }
+	      .button-wrapper button:hover{
+		        box-shadow: 0 3px 4px rgba(0,0,0,.3);
+	      }
+	      .button-wrapper button:active{
+		        box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	      }
+	      .button-wrapper button:focus{
+		        outline:none
+	      }
+
+    }
+  </style>
+  <link rel="stylesheet" href="OSMBuildings/OSMBuildings.css">
+ 
+ <script src="OSMBuildings/OSMBuildings.js"></script>
+</head>
+
+<body>
+<div id="map"></div>
+
+
+<div class="control tilt">
+  <button class="dec">&#8601;</button>
+  <button class="inc">&#8599;</button>
+</div>
+
+<div class="control rotation">
+  <button class="inc">&#8630;</button>
+  <button class="dec">&#8631;</button>
+</div>
+
+<div class="control zoom">
+  <button class="dec">-</button>
+  <button class="inc">+</button>
+</div>
+<div class="button-wrapper">
+	  <div class="label">points:</div>
+	    <button data-point="b">point b</button>
+	      <button data-point="a">point a</button>
+</div>
+<script>
+  var osmb = new OSMBuildings({
+    baseURL: './OSMBuildings',
+    minZoom: 5,
+    maxZoom: 60,
+    position: { latitude: 30.541093, longitude:114.360734 },
+    zoom: 16,
+    state: true, // stores map position/rotation in url
+    effects: ['shadows'],
+    //attribution: '© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
+  }).appendTo('map');
+
+osmb.addMapTiles('http://{s}.tiles.mapbox.com/v3/osmbuildings.kbpalbpk/{z}/{x}/{y}.png');
+//('http://{s}.tiles.mapbox.com/v3/osmbuildings.kbpalbpk/{z}/{x}/{y}.png');
+/*
+{
+     // attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> · © Map <a href="https://mapbox.com/">Mapbox</a>'
+   }
+ );
+*/
+  osmb.addGeoJSONTiles//('OSMBuildings/gndec.json');
+  ('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
+/*  var geojson = {
+	     type: 'FeatureCollection',
+	       features: [{
+  "type": "Feature",
+  "id": "relation/7358227",
+  "properties": {
+	    "timestamp": "2017-06-28T08:40:22Z",
+	      "version": "2",
+	        "changeset": "49881720",
+	          "user": "Gurnoor",
+	      "uid": "6166694",
+        "area": "yes",
+    "building": "yes",
+    "building:colour": "red",
+    "building:condition": "average",
+    "building:fireproof": "unknown",
+    "building:levels": "3",
+    "building:material": "brick",
+    "building:roof:colour": "#FAB617",
+    "building:use": "education",
+    "generator:place": "roof",
+    "generator:source": "solar",
+    "name": "Dept. of Computer Sc. & Engg.",
+    "roof:material": "concrete",
+    "type": "multipolygon",
+    "id": "relation/7358227"
+	  },
+  "geometry": {
+	    "type": "Polygon",
+	      "coordinates": [
+		          [
+				        [
+					                75.8601792,
+						          30.8598777
+							          ],
+							        [
+							                75.8603563,
+							          30.8600393
+							          ],
+						        [
+					                75.8600915,
+				          30.8602544
+			          ],
+	        [
+          75.8599977,
+          30.8601746
+	        ],
+              [
+                75.859937,
+          30.8601229
+          ],
+        [
+                75.8598166,
+          30.8600025
+          ],
+        [
+                75.8598481,
+          30.8597624
+          ],
+        [
+                75.8599424,
+          30.8596873
+          ],
+        [
+                75.8600545,
+          30.8596002
+          ],
+        [
+                75.8601643,
+          30.8595199
+          ],
+        [
+                75.8603686,
+          30.8597045
+          ],
+        [
+                75.8603823,
+          30.8597145
+          ],
+        [
+                75.8602322,
+          30.8598268
+          ],
+        [
+                75.8601792,
+          30.8598777
+          ]
+      ],
+      [
+	        [
+		            75.8601465,
+		              30.8599829
+			          ],
+		            [
+		            75.860084,
+	          30.859918
+              ],
+        [
+            75.8600886,
+          30.8598699
+              ],
+        [
+            75.860169,
+          30.8598082
+              ],
+        [
+            75.8600868,
+          30.8597288
+              ],
+        [
+            75.8599822,
+          30.859817
+              ],
+        [
+            75.8599663,
+          30.8599661
+              ],
+        [
+            75.8600653,
+          30.8600631
+              ],
+        [
+         */
+
+  /*
+
+  //***************************************************************************
+//  osmb.addOBJ('./assets/models/sphere.obj', { latitude: 30.868207, longitude: 75.842990 }, { id: "dugri police station", color: 'black'});
+
+//  osmb.addOBJ('./assets/models/sphere.obj', { latitude: 30.868207, longitude: 75.859941 }, { id: "Water Tank", color: 'black'});
+
+  var currentPoint = 'a';
+  var animationTime = 2500;
+  var buttons = document.querySelectorAll('button');
+  var tween = null;
+  var isAnimating = false;
+
+  [].forEach.call(buttons, function(button){
+	     button.addEventListener('click', handleButton, false);
+  });
+
+function handleButton(){
+	  var pointTo = this.getAttribute('data-point');
+	    var pointFrom = pointTo === 'a' ? 'b' : 'a';
+
+	      if(currentPoint === pointTo || isAnimating){
+		          return false;
+			    }
+
+	        currentPoint = pointTo;
+		  startAnimation(pointData[pointFrom](), pointData[pointTo]());
+}
+
+function startAnimation(valuesFrom, valuesTo){
+	  if(tween){
+		      tween.stop();
+		        }
+
+	    isAnimating = true;
+	      tween = new TWEEN.Tween(valuesFrom)
+		        .to(valuesTo, animationTime)
+			  .onUpdate(function() {
+				      osmb.setPosition({ latitude: this.latitude, longitude: this.longitude });
+				          osmb.setRotation(this.rotation);
+					      osmb.setZoom(this.zoom);
+					          osmb.setTilt(this.tilt);
+						    })
+	        .onComplete(function(){
+			    isAnimating = false;
+			      })
+		  .start();
+
+		    requestAnimationFrame(animate);
+}
+
+function animate(time) {
+	  requestAnimationFrame(animate);
+	    TWEEN.update(time);
+}
+
+  
+  
+  /*
+  var valuesFrom = {latitude: 52.515, longitude: 13.3485, rotation: 0, zoom: 17, tilt: 25},
+    valuesTo = {latitude: 52.5155, longitude: 13.35, rotation: -25, zoom: 17.2, tilt: 50},
+      animationTime = 2500;
+
+var tween = new TWEEN.Tween(valuesFrom)
+	    .to(valuesTo, animationTime)
+	    .onUpdate(function() {
+		            // here we call the functions to update the map state
+		            map.setPosition({ latitude: this.latitude, longitude: this.longitude });
+			            map.setRotation(this.rotation);
+				            map.setZoom(this.zoom);
+					            map.setTilt(this.tilt);
+						        })
+    .start();
+
+    requestAnimationFrame(animate);
+
+    function animate(time) {
+	        requestAnimationFrame(animate);
+		    TWEEN.update(time);
+    }
+*//*							  
+  osmb.on('pointermove', function(e) {
+    var id = osmb.getTarget(e.detail.x, e.detail.y, function(id) {
+      if (id) {
+        document.body.style.cursor = 'pointer';
+        osmb.highlight(id, '#f08000');
+      } else {
+        document.body.style.cursor = 'default';
+        osmb.highlight(null);
+      }
+    });
+  });
+
+  //***************************************************************************
+
+  var controlButtons = document.querySelectorAll('.control button');
+
+  for (var i = 0, il = controlButtons.length; i < il; i++) {
+    controlButtons[i].addEventListener('click', function(e) {
+      var button = this;
+      var parentClassList = button.parentNode.classList;
+      var direction = button.classList.contains('inc') ? 1 : -1;
+      var increment;
+      var property;
+
+      if (parentClassList.contains('tilt')) {
+        property = 'Tilt';
+        increment = direction*7;
+      }
+      if (parentClassList.contains('rotation')) {
+        property = 'Rotation';
+        increment = direction*10;
+      }
+      if (parentClassList.contains('zoom')) {
+        property = 'Zoom';
+        increment = direction*1;
+      }
+      if (property) {
+        osmb['set'+ property](osmb['get'+ property]()+increment);
+      }
+    });
+  
+  }
+// This function does an HTTP get request, given a URL, and passes the response to a callback
+// Source: http://stackoverflow.com/a/4033310/1202488
+function httpGetAsync(theUrl, callback)
+{
+	    var xmlHttp = new XMLHttpRequest();
+	        xmlHttp.onreadystatechange = function() { 
+			        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					            callback(xmlHttp.responseText);
+				    }
+		    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+		        xmlHttp.send(null);
+}
+
+osmb.on('pointerdown', function(e) {
+	  var id = osmb.getTarget(e.detail.x, e.detail.y, function(id) {
+		      if (id) {
+			            var url = "http://overpass-api.de/api/interpreter?data=[out:json];(relation(" + id.replace(/^[a-z]+/, '') + ");way(r);node(w);way(" + id.replace(/^[a-z]+/, '') + ");way(23853131);node(w));out;";
+				          httpGetAsync(url, function(response){
+						          alert(response);
+							        });
+					      }
+		        });
+});*/
+    osmb.on('pointermove', function(e) {
+	        osmb.getTarget(e.detail.x, e.detail.y, function(id) {
+			      if (id) {
+				              document.body.style.cursor = 'pointer';
+					              osmb.highlight(id, '#f08000');
+						            } else {
+								            document.body.style.cursor = 'default';
+									            osmb.highlight(null);
+										          }
+			          });
+		  });
+  //***************************************************************************
+  var controlButtons = document.querySelectorAll('.control button');
+    for (var i = 0, il = controlButtons.length; i < il; i++) {
+													        controlButtons[i].addEventListener('click', function(e) {
+													          var button = this;
+													          var parentClassList = button.parentNode.classList;
+													          var direction = button.classList.contains('inc') ? 1 : -1;
+													          var increment;
+													          var property;
+													          if (parentClassList.contains('tilt')) {
+													            property = 'Tilt';
+													            increment = direction*10;
+													          }
+													          if (parentClassList.contains('rotation')) {
+													            property = 'Rotation';
+													            increment = direction*10;
+													          }
+													          if (parentClassList.contains('zoom')) {
+													            property = 'Zoom';
+													            increment = direction*1;
+													          }
+													          if (property) {
+													            osmb['set'+ property](osmb['get'+ property]()+increment);
+													          }
+													        });
+													      }
+</script>
+
+
+
+</body>
+</html>
